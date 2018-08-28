@@ -61,9 +61,16 @@ function server()
 end
 
 
-function client()
+"""
+    client(to1, to2)
+
+# Arguments
+- 'to1': time from turnoff-all to first conduct, for example 5 seconds
+- 'to2': time from turnoff-all to second conduct, for example 20 seconds
+"""
+function client(to1, to2, ip::IPv4=ip"192.168.1.199", port=12345)
     op = Array{String,1}()
-    sock = connect(ip"192.168.1.199", 12345)
+    sock = connect(ip, port)
 
     write(sock, [0x41 0x54 0x0D 0x0A])
     status = readline(sock)
@@ -88,12 +95,12 @@ function client()
     write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x30 0x3D 0x30 0x0D 0x0A])
     status = readline(sock)
     push!(op, "Turn off all switches: $status")
-    sleep(5)
+    sleep(to1)
 
     write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x31 0x3D 0x31 0x0D 0x0A])
     status = readline(sock)
     push!(op, "Turn on switch 1: $status")
-    sleep(20)
+    sleep(to2)
 
     write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x32 0x3D 0x31 0x0D 0x0A])
     status = readline(sock)
