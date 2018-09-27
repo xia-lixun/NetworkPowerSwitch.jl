@@ -4,6 +4,11 @@ using Sockets
 # Host IP: 192.168.1.190:6000 (server)
 
 
+"""
+    server()
+
+deprecated. use client function for better responsiveness.
+"""
 function server()
     op = Array{String,1}()
     #@async begin
@@ -17,11 +22,9 @@ function server()
             write(sock, [0x41 0x54 0x2B 0x4C 0x49 0x4E 0x4B 0x53 0x54 0x41 0x54 0x3D 0x3F 0x0D 0x0A])
             status = readline(sock)
             push!(op, "AT+LINKSTAT: $status")
-            
             write(sock, [0x41 0x54 0x2B 0x4D 0x4F 0x44 0x45 0x4C 0x3D 0x3F 0x0D 0x0A])
             status = readline(sock)
             push!(op, "AT+MODEL: $status")
-
             strtemp = "Init Status: "
             write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x30 0x3D 0x3F 0x0D 0x0A])
             for i = 1:4
@@ -29,24 +32,17 @@ function server()
                 strtemp = strtemp * status
             end
             push!(op, strtemp)
-
             write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x30 0x3D 0x30 0x0D 0x0A])
             status = readline(sock)
             push!(op, "Turn off all switches: $status")
             sleep(5)
-
-
             write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x31 0x3D 0x31 0x0D 0x0A])
             status = readline(sock)
             push!(op, "Turn on switch 1: $status")
             sleep(20)
-
-
             write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x32 0x3D 0x31 0x0D 0x0A])
             status = readline(sock)
             push!(op, "Turn on switch 2: $status")
-            
-            
             strtemp = "Status: "
             write(sock, [0x41 0x54 0x2B 0x53 0x54 0x41 0x43 0x48 0x30 0x3D 0x3F 0x0D 0x0A])
             for i = 1:4
@@ -65,8 +61,8 @@ end
     client(to1, to2)
 
 # Arguments
-- 'to1': time from turnoff-all to first conduct, for example 5 seconds
-- 'to2': time from turnoff-all to second conduct, for example 20 seconds
+    - 'to1': time from turnoff-all to first conduct, for example 5 seconds
+    - 'to2': time from turnoff-all to second conduct, for example 20 seconds
 """
 function client(to1, to2, ip::IPv4=ip"192.168.1.199", port=12345)
     op = Array{String,1}()
