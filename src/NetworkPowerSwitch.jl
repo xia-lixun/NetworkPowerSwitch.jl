@@ -195,4 +195,21 @@ end
 
 
 
+
+"""
+    alloff()
+
+turn all switches off
+"""
+function alloff()
+    try
+        nps = npsopen()
+        npsoff(nps)
+        npsclose(nps)
+    catch
+        npserr()
+    end
+end
+
+
 end # module
